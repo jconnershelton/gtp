@@ -27,10 +27,16 @@ Hosting a server using GTP is very simple. This line will get you up and running
 ```c
 #include <GTP/serve.h>
 
-GTP_Serve(unsigned short port, GTPBuffer *(*processBuffer)(const GTPBuffer *buffer, bool *serving));
+GTPBuffer *processRequest(const GTPBuffer *request, bool *serving) {
+    // Process request here...
+}
+
+unsigned short port = 222; // Any port here
+
+GTP_Serve(port, processRequest);
 ```
 
-The first argument is the port that the server will be hosted on (*in host byte order*), and the second argument is a function pointer that is called whenever the server receives a request. The function should take in the request buffer, process it in some arbitrary way, and return a new buffer to send back to the client. Additionally, this function can set the parameter `serving` to false to terminate the server.
+The first argument is the port that the server will be hosted on (*in host byte order*), and the second argument is a function pointer that is called whenever the server receives a request. The function should take in the request buffer, process it in some arbitrary way, and return a new buffer to send back to the client. Additionally, this function can set `*serving = false` to terminate the server.
 
 ## Client Example
 
@@ -39,7 +45,12 @@ Connecting and sending a request to a GTP server is also very easy with this lin
 ```c
 #include <GTP/send.h>
 
-GTPBuffer *response = GTP_Send(GTPBuffer *buffer, const char *ipAddress, unsigned short port);
+// Dummy arguments
+GTPBuffer *buffer = GTPBuffer_Alloc();
+const char *ipAddress = "127.0.0.1";
+unsigned short port = 222;
+
+GTPBuffer *response = GTP_Send(buffer, ipAddress, port);
 ```
 
 The first argument is the buffer to be sent, while the second and third are the IP address and serving port of the destination machine. A pointer to the response buffer is returned, and elements can be fetched from it using `GTPBuffer_GetElement(GTPBuffer *buffer, const char *name)`.
