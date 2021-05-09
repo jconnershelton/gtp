@@ -16,13 +16,13 @@ To install GTP on your machine, simply navigate to the cloned GTP directory in a
 This will place both static and dynamic libraries in `/usr/local/lib` as well as all public header files in `/usr/local/include`.
 If you only want to build and not install the library, type:
 
-`$ make gtp-static` *or* `$ make gtp-dynamic`
+`$ make gtp-static`  or  `$ make gtp-dynamic`
 
 This will compile the static or dynamic library and place it in the `lib` directory. All public header files are located in the `include` directory.
 
 ## Server Example
 
-Hosting a server using GTP is very simple. This line will get you up and running:
+Hosting a server using GTP is very simple. This code will get you up and running:
 
 ```c
 #include <GTP/serve.h>
@@ -40,17 +40,17 @@ The first argument is the port that the server will be hosted on (*in host byte 
 
 ## Client Example
 
-Connecting and sending a request to a GTP server is also very easy with this line:
+Connecting and sending a request to a GTP server is also very easy with this code:
 
 ```c
 #include <GTP/send.h>
 
 // Dummy arguments
-GTPBuffer *buffer = GTPBuffer_Alloc();
+GTPBuffer *request = GTPBuffer_Alloc();
 const char *ipAddress = "127.0.0.1";
 unsigned short port = 222;
 
-GTPBuffer *response = GTP_Send(buffer, ipAddress, port);
+GTPBuffer *response = GTP_Send(request, ipAddress, port);
 ```
 
 The first argument is the buffer to be sent, while the second and third are the IP address and serving port of the destination machine. A pointer to the response buffer is returned, and elements can be fetched from it using `GTPBuffer_GetElement(GTPBuffer *buffer, const char *name)`.
