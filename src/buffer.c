@@ -20,7 +20,7 @@ void GTPBuffer_AddStringElement(GTPBuffer *buffer, const char *name, const char 
     GTPBuffer_AddElement(buffer, name, str, strlen(str) + 1);
 }
 
-GTPElement *GTPBuffer_GetElement(GTPBuffer *buffer, const char *name) {
+GTPElement *GTPBuffer_GetElement(const GTPBuffer *buffer, const char *name) {
     const uint8_t *endData = (const uint8_t *) buffer->body + buffer->bodylen;
 
     size_t namelen;
