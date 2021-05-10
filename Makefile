@@ -6,11 +6,11 @@ OBJS := $(patsubst %.c,%.o,$(subst src/,build/,$(SRCS)))
 
 gtp-static: $(OBJS)
 	@mkdir -p lib
-	ar -rv lib/gtp.a $^
+	ar -rv lib/libgtp.a $^
 
 gtp-dynamic: $(OBJS)
 	@mkdir -p lib
-	$(CC) -shared -fpic $^ -o lib/gtp.dylib
+	$(CC) -shared -fpic $^ -o lib/libgtp.dylib
 
 install: gtp-static gtp-dynamic
 	cp -r include/* /usr/local/include
