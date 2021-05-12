@@ -1,5 +1,10 @@
 #pragma once
 
+// Making sure C++ can include this header
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdint.h>
 #include <stddef.h>
 
@@ -20,3 +25,8 @@ GTPElement *GTPBuffer_GetElement(const GTPBuffer *buffer, const char *name);
 
 GTPBuffer *GTPBuffer_Alloc(void);
 void GTPBuffer_Free(GTPBuffer *buffer);
+
+// End of the extern C block 
+#ifdef __cplusplus
+}
+#endif
