@@ -8,7 +8,7 @@ gtp: gtp-static gtp-dynamic
 
 install: gtp
 	cp -r include/* /usr/local/include
-	cp -r lib/libgtp.a libgtp.dylib /usr/local/lib
+	cp -r lib/libgtp.a lib/libgtp.dylib /usr/local/lib
 
 gtp-static: $(OBJS)
 	@mkdir -p lib
