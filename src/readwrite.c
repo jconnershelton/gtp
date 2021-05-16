@@ -10,7 +10,7 @@ GTPBuffer *_readGTPBuffer(int fd) {
     buffer->body = malloc(buffer->bodylen);
     uint8_t *dataptr = buffer->body;
 
-    int rounds = buffer->bodylen >> 11; // Equivalent to / 2048
+    int rounds = (int) (buffer->bodylen >> 11); // Equivalent to / 2048
     for (int r = 0; r < rounds; r++) {
         read(fd, dataptr, 2048);
         dataptr += 2048;
@@ -27,7 +27,7 @@ void _writeGTPBuffer(GTPBuffer *buffer, int fd) {
 
     const uint8_t *dataptr = buffer->body;
 
-    int rounds = buffer->bodylen >> 11; // Equivalent to / 2048
+    int rounds = (int) (buffer->bodylen >> 11); // Equivalent to / 2048
     for (int r = 0; r < rounds; r++) {
         write(fd, dataptr, 2048);
         dataptr += 2048;
