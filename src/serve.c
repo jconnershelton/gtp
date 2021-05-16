@@ -24,9 +24,9 @@ void GTP_Serve(unsigned short port, GTPBuffer *(*processBuffer)(const GTPBuffer 
         int connfd = accept(sockfd, (struct sockaddr*) &addr, &addrlen);
         if (connfd == -1) continue;
 
-        GTPBuffer *inBuffer = _readGTPBuffer(connfd);
+        GTPBuffer *inBuffer = readGTPBuffer(connfd);
         GTPBuffer *outBuffer = processBuffer(inBuffer, &serving);
-        _writeGTPBuffer(outBuffer, connfd);
+        writeGTPBuffer(outBuffer, connfd);
 
         GTPBuffer_Free(inBuffer);
         GTPBuffer_Free(outBuffer);

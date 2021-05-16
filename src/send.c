@@ -15,6 +15,6 @@ GTPBuffer *GTP_Send(GTPBuffer *buffer, const char *addrStr, unsigned short port)
     if (inet_pton(AF_INET, addrStr, &addr.sin_addr) != 1) return NULL;
     if (connect(sockfd, (struct sockaddr*) &addr, sizeof(addr)) != 0) return NULL;
 
-    _writeGTPBuffer(buffer, sockfd);
-    return _readGTPBuffer(sockfd);
+    writeGTPBuffer(buffer, sockfd);
+    return readGTPBuffer(sockfd);
 }

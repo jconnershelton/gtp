@@ -2,5 +2,5 @@
 
 #include "GTP/buffer.h"
 
-GTPBuffer *_readGTPBuffer(int fd);
-void _writeGTPBuffer(GTPBuffer *buffer, int fd);
+GTPBuffer *readGTPBuffer(int fd);
+void writeGTPBuffer(GTPBuffer *buffer, int fd);

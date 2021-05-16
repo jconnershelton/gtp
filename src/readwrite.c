@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-GTPBuffer *_readGTPBuffer(int fd) {
+GTPBuffer *readGTPBuffer(int fd) {
     GTPBuffer *buffer = GTPBuffer_Alloc();
     read(fd, &buffer->bodylen, sizeof(uint64_t));
     
@@ -22,7 +22,7 @@ GTPBuffer *_readGTPBuffer(int fd) {
     return buffer;
 }
 
-void _writeGTPBuffer(GTPBuffer *buffer, int fd) {
+void writeGTPBuffer(GTPBuffer *buffer, int fd) {
     write(fd, &buffer->bodylen, sizeof(uint64_t));
 
     const uint8_t *dataptr = buffer->body;
