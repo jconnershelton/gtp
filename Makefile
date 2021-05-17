@@ -7,7 +7,8 @@ OBJS := $(patsubst %.c,%.o,$(subst src/,build/,$(SRCS)))
 gtp: gtp-static gtp-dynamic
 
 install: gtp
-	cp -r include/* /usr/local/include
+	rm -rf /usr/local/include/GTP
+	cp -r include/GTP /usr/local/include
 	cp -r lib/libgtp.a lib/libgtp.dylib /usr/local/lib
 
 gtp-static: $(OBJS)
