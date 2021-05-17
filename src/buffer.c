@@ -5,15 +5,23 @@
 #include <errno.h>
 
 void GTPBuffer_AddElement(GTPBuffer *buffer, const char *name, const void *data, uint64_t datalen) {
-    size_t namelen = strlen(name) + 1; // +1 for null terminator
+    size_t nameOffset = buffer->bodylen;
+    buffer->bodylen += strlen(name) + 1;
+
+    size_t datalenOffset = buffer->bodylen;
+    buffer->bodylen += sizeof(datalen);
+
+    size_t dataOffset = buffer->bodylen;
+    buffer->bodylen += datalen;
 
     // Realloc buffer to fit name and data
-    buffer->bodylen += namelen + datalen;
     buffer->body = realloc(buffer->body, buffer->bodylen);
-
+    char *dataptr = buffer->body;
+    
     // Copy name then data into new memory
-    strcpy((char *) buffer->body + buffer->bodylen - datalen - namelen, name);
-    memcpy((uint8_t *) buffer->body + buffer->bodylen - datalen, data, datalen);
+    strcpy(dataptr + nameOffset, name);
+    memcpy(dataptr + datalenOffset, &datalen, sizeof(datalen));
+    memcpy(dataptr + dataOffset, data, datalen);
 }
 
 void GTPBuffer_AddStringElement(GTPBuffer *buffer, const char *name, const char *str) {
@@ -21,33 +29,32 @@ void GTPBuffer_AddStringElement(GTPBuffer *buffer, const char *name, const char 
 }
 
 GTPElement *GTPBuffer_GetElement(const GTPBuffer *buffer, const char *name) {
-    const uint8_t *endData = (const uint8_t *) buffer->body + buffer->bodylen;
+    const char *endptr = (const char *) buffer->body + buffer->bodylen;
+    const char *dataptr = buffer->body;
 
     size_t namelen;
     size_t elementlen;
 
-    const uint8_t *dataptr = buffer->body;
-    while (dataptr < endData) {
-        namelen = strnlen((char *) dataptr, buffer->bodylen);
-        if (namelen == buffer->bodylen) {
-            errno = 1;
-            return NULL;
-        }
-
-        elementlen = *((uint64_t *) (dataptr + namelen + 1));
+    while (dataptr < endptr) {
+        namelen = strnlen(dataptr, endptr - dataptr) + 1;
+        elementlen = *((uint64_t *) (dataptr + namelen));
 
         if (strcmp((char *) dataptr, name) == 0) {
             GTPElement *element = malloc(sizeof(GTPElement));
-            element->data = (void *) (dataptr + namelen + 1 + sizeof(uint64_t));
+            element->data = (void *) (dataptr + namelen + sizeof(elementlen));
             element->size = elementlen;
-            
+
             return element;
         }
 
-        dataptr += namelen + 1 + elementlen + sizeof(uint64_t);
+        dataptr += namelen + sizeof(elementlen) + elementlen;
     }
 
     return NULL;
+}
+
+const char *GTPBuffer_GetStringElement(const GTPBuffer *buffer, const char *name) {
+    return (const char *) GTPBuffer_GetElement(buffer, name)->data;
 }
 
 GTPBuffer *GTPBuffer_Alloc(void) {

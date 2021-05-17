@@ -22,6 +22,7 @@ void GTPBuffer_AddElement(GTPBuffer *buffer, const char *name, const void *data,
 void GTPBuffer_AddStringElement(GTPBuffer *buffer, const char *name, const char *string);
 
 GTPElement *GTPBuffer_GetElement(const GTPBuffer *buffer, const char *name);
+const char *GTPBuffer_GetStringElement(const GTPBuffer *buffer, const char *name);
 
 GTPBuffer *GTPBuffer_Alloc(void);
 void GTPBuffer_Free(GTPBuffer *buffer);
