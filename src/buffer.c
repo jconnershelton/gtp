@@ -54,7 +54,8 @@ GTPElement *GTPBuffer_GetElement(const GTPBuffer *buffer, const char *name) {
 }
 
 const char *GTPBuffer_GetStringElement(const GTPBuffer *buffer, const char *name) {
-    return (const char *) GTPBuffer_GetElement(buffer, name)->data;
+    GTPElement *element = GTPBuffer_GetElement(buffer, name);
+    return element == NULL ? NULL : (const char *) element->data;
 }
 
 GTPBuffer *GTPBuffer_Alloc(void) {
