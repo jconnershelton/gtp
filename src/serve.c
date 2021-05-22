@@ -49,7 +49,8 @@ void GTP_Serve(unsigned short port, GTPBuffer *(*processBuffer)(const GTPBuffer 
     if (bind(sockfd, (struct sockaddr *) &addr, addrlen) != 0) return;
     if (listen(sockfd, 10) != 0) return; // Edit to increase max queue
     
-    pthread_create(&GTP_server_thread, NULL, serveLoop, &addr);
+    GTP_running = true;
+    pthread_create(&GTP_server_thread, NULL, serveLoop, processBuffer);
 }
 
 void GTP_Close(void) {
