@@ -11,12 +11,18 @@ endif
 SRCS := $(shell echo src/*.c)
 OBJS := $(patsubst %.c,%.o,$(subst src/,build/,$(SRCS)))
 
+.PHONY: gtp install uninstall clean
+
 gtp: gtp-static gtp-dynamic
 
 install: gtp
 	rm -rf /usr/local/include/GTP
 	cp -r include/GTP /usr/local/include
 	cp -r lib/libgtp.a lib/libgtp.$(DYN_EXT) /usr/local/lib
+
+uninstall:
+	rm -rf /usr/local/include/GTP
+	rm -f /usr/local/lib/libgtp.a /usr/local/lib/libgtp.$(DYN_EXT)
 
 gtp-static: $(OBJS)
 	@mkdir -p lib
@@ -30,6 +36,5 @@ build/%.o: src/%.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $^ -o $@
 
-.PHONY: clean
 clean:
 	@rm -rf build lib
